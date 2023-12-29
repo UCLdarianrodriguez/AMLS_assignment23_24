@@ -1,9 +1,10 @@
 
 """ Executing task A"""
 
-from A import helper_functions as hf
 from sklearn.metrics import roc_curve, roc_auc_score
 import matplotlib.pyplot as plt
+from A import helper_functions as hf
+
 
 def pneumonia_task():
 
@@ -81,7 +82,6 @@ def pneumonia_task():
     # Save plot evaluating the performance 
     hf.report_results(y_pred,pneumonia.y_val,"./A/figures/Random Forest confusion matrix validation set")
 
-
     # Report ROC Curve on the testing set for the different propose models
     models = [svm_rbf,forest,tree]
     labels = ["svm_rbf","forest","tree"]
@@ -105,3 +105,19 @@ def pneumonia_task():
 
     # Save plot in the figures folder
     plt.savefig("./A/figures/ROC Curve all Models.png")
+
+    # Plot confusion matrix for all the models on test set
+    main_label = "Confusion matrix "
+
+    for index, model in enumerate(models):
+        print(labels[index])
+        y_pred = model.predict(pneumonia.x_test)
+        hf.report_results(y_pred,pneumonia.y_test,"./A/figures/"+main_label+labels[index])
+
+    # Predict x test using PCA-SVM 
+    y_pred = svm_pca.predict(x_test_pca)
+
+    # Plot PCA confusion matrix on test set
+    print("PCA-SVM")
+    hf.report_results(y_pred,pneumonia.y_test,"./A/figures/PCA Confusion matrix")
+

@@ -117,6 +117,7 @@ class MNISTDataManager:
         plt.savefig(f"{folder_path}/{name}.png")
 
     def plot_images(self):
+        """ Plot some images in the dataset """
         num_total = len(self.train_dataset.imgs)
         # class_names = self.y_train
         images = self.train_dataset.imgs
@@ -125,7 +126,7 @@ class MNISTDataManager:
         if self.train_dataset.__dict__["info"]["n_channels"] == 1:
             mapping = "grey"
         else:
-            mapping = "rgb"
+            mapping = "viridis"
 
         plt.subplots(3, 3, figsize=(5, 5))
 
