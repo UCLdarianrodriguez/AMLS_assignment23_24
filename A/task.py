@@ -2,6 +2,8 @@
 """ Executing task A"""
 
 from A import helper_functions as hf
+from sklearn.metrics import roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
 
 def pneumonia_task():
 
@@ -51,12 +53,12 @@ def pneumonia_task():
     hf.plot_hyper_tuning(dimensions_list,scores,"F1-Score over diffent PCA-SVM","Components",name="PCA components scores (SVM)")
 
     # Selecting only the first 9 components based on the past graph
-    svm_classifier,pca,scaler = hf.PCA_model(pneumonia,9)
+    svm_pca,pca,scaler = hf.PCA_model(pneumonia,9)
     x_val_scaled = scaler.transform(pneumonia.x_val)
     x_val_pca = pca.transform(x_val_scaled)
 
     # Predict using the trained classifier
-    y_pred = svm_classifier.predict(x_val_pca)
+    y_pred = svm_pca.predict(x_val_pca)
 
     # Report on validation set the PCA results
     hf.report_results(y_pred,pneumonia.y_val,"./A/figures/PCA confusion matrix validation set")
@@ -78,3 +80,28 @@ def pneumonia_task():
 
     # Save plot evaluating the performance 
     hf.report_results(y_pred,pneumonia.y_val,"./A/figures/Random Forest confusion matrix validation set")
+
+
+    # Report ROC Curve on the testing set for the different propose models
+    models = [svm_rbf,forest,tree]
+    labels = ["svm_rbf","forest","tree"]
+
+    fig, ax = hf.models_roc(pneumonia.x_test,pneumonia.y_test,models,labels,name="")
+
+    # PCA model on test set 
+    x_test_scaled = scaler.transform(pneumonia.x_test)
+    x_test_pca = pca.transform(x_test_scaled)
+
+    # Predict probabilities for positive class PCA
+    y_prob = svm_pca.predict_proba(x_test_pca)[:, 1]
+
+    # Calculate ROC curve and AUC each model
+    fpr_model, tpr_model, _ = roc_curve(pneumonia.y_test, y_prob)
+    auc_model = roc_auc_score(pneumonia.y_test, y_prob)
+
+    # Plot ROC curves for diffent models
+    ax.plot(fpr_model, tpr_model, label=f'PCA-SVM (AUC = {auc_model:.2f})')
+    ax.legend()
+
+    # Save plot in the figures folder
+    plt.savefig("./A/figures/ROC Curve all Models.png")

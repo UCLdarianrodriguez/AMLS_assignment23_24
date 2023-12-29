@@ -232,7 +232,7 @@ def iterate_hyper(dataset, iteractions, kernel_type) -> list:
 
     return scores
 
-def models_roc(x_eval,y_eval,models:list,labels:list,name:str):
+def models_roc(x_eval,y_eval,models:list,labels:list,name:str=""):
 
     """
     Generate ROC curves for multiple models evaluated on given data.
@@ -242,13 +242,15 @@ def models_roc(x_eval,y_eval,models:list,labels:list,name:str):
         y_eval (array-like): Ground truth labels corresponding to the evaluation data.
         models (list) : A list containing multiple models 
         labels (list) : list of labels for each model in the 'models' list.
+        name(str): filename
 
     """    
     
-    plt.figure(figsize=(8, 6))
+    # creating the plot
+    fig, ax = plt.subplots(1, figsize=(8, 6))
 
     # Plotting the diagonal line for reference (random classifier)
-    plt.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Random Classifier')
+    ax.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Random Classifier')
 
     for index,model in enumerate(models):
 
@@ -260,21 +262,24 @@ def models_roc(x_eval,y_eval,models:list,labels:list,name:str):
         auc_model = roc_auc_score(y_eval, y_prob)
 
         # Plot ROC curves for diffent models
-        plt.plot(fpr_model, tpr_model, label=f'{labels[index]} (AUC = {auc_model:.2f})')
+        ax.plot(fpr_model, tpr_model, label=f'{labels[index]} (AUC = {auc_model:.2f})')
 
 
     # Set plot labels and title
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('ROC Curve for Different Models')
-    plt.legend()
-    plt.grid(True)
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title('ROC Curve for Different Models')
+    ax.legend()
+    ax.grid(True)
 
-    # Define the path where you want to save the plot
-    folder_path = "./A/figures"
+    if name == "":
+        # Define the path where you want to save the plot
+        folder_path = "./A/figures"
 
-    # Save plot in the figures folder
-    plt.savefig(f"{folder_path}/{name}.png")
+        # Save plot in the figures folder
+        plt.savefig(f"{folder_path}/{name}.png")
+
+    return fig,ax
 
 def report_results(y_pred,y_real,path):
 
