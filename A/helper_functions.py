@@ -71,12 +71,13 @@ class MNISTDataManager:
             self.x_val = self.x_val.reshape(self.x_val.shape[0], -1)
             self.x_test = self.x_test.reshape(self.x_test.shape[0], -1)
 
-    def barplot_categories(self, name: str):
+    def barplot_categories(self, angle,name: str):
         """
         Create a bar plot showing the distribution of classes
         comparing training, validation and testing sets.
 
         Args:
+            angle(int): rotation angle for xlabels
             name (str) : specify the file name
         """
         fig, ax = plt.subplots(1, 3, figsize=(30, 10))
@@ -103,18 +104,18 @@ class MNISTDataManager:
 
             # Plot number of each bar
             ax[i].bar_label(bar_container, fmt="{:,.0f}", fontsize=12)
+            ax[i].set_xticklabels(value_labels, rotation=angle)
 
         # Setting axis titles
         ax[0].set_title("Training set", fontsize=14)
         ax[1].set_title("Validation set", fontsize=14)
         ax[2].set_title("Testing set", fontsize=14)
         ax[0].set_ylabel("Number of samples")
+        plt.tight_layout()
 
-        # Define the path where you want to save the plot
-        folder_path = "./A/figures"
 
         # Save plot in the figures folder
-        plt.savefig(f"{folder_path}/{name}.png")
+        plt.savefig(f"{name}.png")
 
     def plot_images(self):
         """ Plot some images in the dataset """

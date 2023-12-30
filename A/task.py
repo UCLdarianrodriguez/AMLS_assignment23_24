@@ -16,7 +16,9 @@ def pneumonia_task():
     pneumonia = hf.MNISTDataManager("pneumoniamnist")
     pneumonia.load_data()
     pneumonia.split_dataset(flat=True) #choose to flatten the image
-    pneumonia.barplot_categories("Pneumonia classes distribution")
+    folder_path = "./A/figures"
+    filename = f"{folder_path}/Pneumonia classes distribution"
+    pneumonia.barplot_categories(angle=0,name=filename)
 
     # Using SVM with polynomial kernel
     degrees = range(1, 10)  # try degrees from 1 to 10
