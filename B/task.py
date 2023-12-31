@@ -99,7 +99,9 @@ def multiclass_task():
 
         # Plots to save on test set
         chart = hf.report_bar(pathmnist.y_test,y_pred,f"F1 score {labels[index]} TS")
-        hf.report_multi_results(y_pred,pathmnist.y_test,class_labels,f"./B/figures/{labels[index]} Confusion matrix TS")
+        hf.report_multi_results(y_pred,pathmnist.y_test,class_labels,f"{labels[index]} Confusion matrix TS")
+
+        hf.roc_multiclass(test_predictions,pathmnist.y_test,labels[index],f"{labels[index]} ROC Curve")
 
 
 
