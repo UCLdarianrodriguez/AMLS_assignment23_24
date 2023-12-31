@@ -24,8 +24,8 @@ def model_neural_network(params):
     # Define the model without batch normalization
     model = models.Sequential([
         layers.Flatten(input_shape=(28, 28, 3)),
+        layers.Dense(256, activation='relu'),
         layers.Dense(128, activation='relu'),
-        layers.Dense(64, activation='relu'),
         layers.Dense(64, activation='relu'),
         layers.Dense(9, activation='softmax')  # 9 output classes (0-8) with softmax
     ])
@@ -57,10 +57,10 @@ def model_nn_regularizer(dropout_value,params):
     model = models.Sequential([
         layers.Flatten(input_shape=(28, 28, 3)),
         layers.BatchNormalization(),
-        layers.Dense(128, activation='relu'),
+        layers.Dense(256, activation='relu'),
         layers.BatchNormalization(),
         layers.Dropout(dropout_value),
-        layers.Dense(64, activation='relu'),
+        layers.Dense(128, activation='relu'),
         layers.BatchNormalization(),
         layers.Dropout(dropout_value),
         layers.Dense(64, activation='relu'),
