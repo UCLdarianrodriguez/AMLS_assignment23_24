@@ -19,7 +19,10 @@ from sklearn.metrics import (
     classification_report,
     confusion_matrix,
     f1_score,
+    precision_score,
+    recall_score
 )
+
 
 
 class MNISTDataManager:
@@ -274,7 +277,7 @@ def models_roc(x_eval,y_eval,models:list,labels:list,name:str=""):
     ax.legend()
     ax.grid(True)
 
-    if name == "":
+    if name != "":
         # Define the path where you want to save the plot
         folder_path = "./A/figures"
 
@@ -296,7 +299,11 @@ def report_results(y_pred,y_real,path):
 
     # Calculate accuracy
     accuracy = f1_score(y_real, y_pred)
+    precision = precision_score(y_real, y_pred)
+    recall = recall_score(y_real, y_pred)
     print(f"F1-Score of the Classifier: {accuracy}")
+    print(f"precision of the Classifier: {precision}")
+    print(f"recall of the Classifier: {recall}")
 
     # Generate classification report
     report = classification_report(y_real, y_pred)
@@ -346,7 +353,7 @@ def PCA_model(dataset,dimension):
     # Fit PCA to the data
     pca.fit(x_train_scaled)
 
-    # Fit PCA on your data
+    # Transforms data to lower dimension
     x_train_pca = pca.transform(x_train_scaled)
 
     #print("Transformed shape:", x_train_pca.shape)
@@ -410,7 +417,7 @@ def tree_model(dataset):
         'criterion':'gini',
         'splitter':'best',
         'max_features': 100,
-        'max_depth': 10,
+        'max_depth': 15,
         'min_samples_split':50
 
     }
@@ -439,7 +446,7 @@ def random_forest_model(dataset):
     rf_params = {
         'n_estimators': 100,  # Number of trees in the forest
         'criterion': 'gini',  # Split criterion: 'gini' or 'entropy'
-        'max_depth': None,  # Maximum depth of the trees
+        'max_depth': 15,  # Maximum depth of the trees
         'min_samples_split': 2,  # Minimum samples required to split a node
         'min_samples_leaf': 1,  # Minimum samples required at each leaf node
         'max_features': 'sqrt',  # Number of features to consider for the best split

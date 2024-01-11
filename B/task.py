@@ -1,9 +1,9 @@
 """ Executing task B"""
 
 import tensorflow as tf
+import numpy as np
 from B import helper_functions as hf
 from A.helper_functions import MNISTDataManager
-import numpy as np
 
 
 def multiclass_task():
@@ -61,6 +61,8 @@ def multiclass_task():
 
     # Plot Report regularized NN
     hf.report_multi_results(y_pred,pathmnist.y_val,class_labels,"Confusion matrix regularized nn")
+
+    print("Training CNN")
 
     # Create instance of the simple CNN
     historic_cnn,model_cnn = hf.model_cnn_simple(params)

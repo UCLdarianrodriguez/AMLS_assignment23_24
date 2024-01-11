@@ -7,7 +7,10 @@ def main():
     """ 
         Call the code from different tasks
     """
-    #task_A.pneumonia_task()
+    print("RUNNING TASK A")
+    task_A.pneumonia_task()
+
+    print("RUNNING TASK B")
     task_B.multiclass_task()
 
 if __name__ == "__main__":

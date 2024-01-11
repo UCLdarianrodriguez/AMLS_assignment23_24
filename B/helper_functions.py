@@ -31,6 +31,7 @@ def model_neural_network(params):
     # Define the model without batch normalization
     model = models.Sequential([
         layers.Flatten(input_shape=(28, 28, 3)),
+        layers.BatchNormalization(),
         layers.Dense(256, activation='relu'),
         layers.Dense(128, activation='relu'),
         layers.Dense(64, activation='relu'),
@@ -65,12 +66,15 @@ def model_nn_regularizer(dropout_value,params):
         layers.Flatten(input_shape=(28, 28, 3)),
         layers.BatchNormalization(),
         layers.Dense(256, activation='relu'),
+
         layers.BatchNormalization(),
         layers.Dropout(dropout_value),
         layers.Dense(128, activation='relu'),
+
         layers.BatchNormalization(),
         layers.Dropout(dropout_value),
         layers.Dense(64, activation='relu'),
+
         layers.BatchNormalization(),
         layers.Dropout(dropout_value),
         layers.Dense(9, activation='softmax')  # 9 output classes (0-8) with softmax
@@ -206,6 +210,9 @@ def plot_accuracy_epochs(history,name:str):
     # Save plot in the figures folder
     plt.savefig(f"{folder_path}/{name}.png")
 
+    # Explicitly close the figure
+    plt.close()
+
 
 def report_bar(y_pred,y_true,name:str):
 
@@ -234,7 +241,7 @@ def report_bar(y_pred,y_true,name:str):
     bar_container = plt.bar(report_df.index,report_df['F1 score']*100,edgecolor='black', color = sns.color_palette('pastel', 8))
 
     # Specify the classes
-    plt.xticks(range(0,9))
+    plt.xticks(range(0,9),fontweight='bold',fontsize=18)
 
     # Plot number of each bar
     plt.bar_label(bar_container, fmt='{:.2f}%',fontsize=12,fontweight='bold')
@@ -248,6 +255,9 @@ def report_bar(y_pred,y_true,name:str):
 
     # Save plot in the figures folder
     plt.savefig(f"{folder_path}/{name}.png")
+
+    # Explicitly close the figure
+    plt.close()
 
     return report_df
 
@@ -285,6 +295,9 @@ def report_multi_results(y_pred,y_real,labels,name:str):
 
     # Save plot in the figures folder
     plt.savefig(f"{folder_path}/{name}.png")
+    
+    # Explicitly close the figure
+    plt.close()
 
 def roc_multiclass(class_probabilities,true_labels,model_name,name):
 
@@ -324,4 +337,7 @@ def roc_multiclass(class_probabilities,true_labels,model_name,name):
 
     # Save plot in the figures folder
     plt.savefig(f"{folder_path}/{name}.png")
+
+    # Explicitly close the figure
+    plt.close()
 

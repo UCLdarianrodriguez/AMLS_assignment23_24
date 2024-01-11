@@ -22,17 +22,17 @@ def pneumonia_task():
 
     # Using SVM with polynomial kernel
     degrees = range(1, 10)  # try degrees from 1 to 10
-    scores = hf.iterate_hyper(pneumonia,degrees,kernel_type= 'poly')
+    #scores = hf.iterate_hyper(pneumonia,degrees,kernel_type= 'poly')
 
     # Save plot evaluating the performance over different degrees
-    hf.plot_hyper_tuning(degrees,scores,"F1-Score over polynomial degree (SVM)","Degree",name="Polynomial degrees scores")
+    #hf.plot_hyper_tuning(degrees,scores,"F1-Score over polynomial degree (SVM)","Degree",name="Polynomial degrees scores")
 
     # Using SVM with RBF kernel
     c = [0.01, 0.1, 0.2, 0.3,0.5,0.8,1,2,20,100] # SVM regularization parameter
-    scores = hf.iterate_hyper(pneumonia,c,kernel_type= 'rbf')
+    #scores = hf.iterate_hyper(pneumonia,c,kernel_type= 'rbf')
 
     # Save plot evaluating the performance over different C values
-    hf.plot_hyper_tuning(c,scores,"F1-Score over RBF C parameter (SVM)","C",name="C Regularisation scores (SVM)",log=True)
+    #hf.plot_hyper_tuning(c,scores,"F1-Score over RBF C parameter (SVM)","C",name="C Regularisation scores (SVM)",log=True)
 
     # Train final models SVM one polynomial and another rbf
     svm_poly = hf.train_svm(pneumonia.x_train, pneumonia.y_train,degree = 3,kernel_type= 'poly',gamma='scale')
@@ -41,19 +41,28 @@ def pneumonia_task():
     # Compute ROC Curve for the best polynomial and rbf SVM to choose one
     models = [svm_poly,svm_rbf]
     labels = ["svm_poly","svm_rbf"]
+
     hf.models_roc(pneumonia.x_val,pneumonia.y_val,models,labels,name="ROC Curve SVM")
 
+    # Compute confusion matrix for poly SVM on validation set
+    print("Poly kernel on validation")
+    y_pred = svm_poly.predict(pneumonia.x_val)
+    y_real = pneumonia.y_val
+    hf.report_results(y_pred,y_real,"./A/figures/Poly confusion matrix validation set")
+
+
     # Compute confusion matrix for rbf SVM on validation set
+    print("RBF kernel on validation")
     y_pred = svm_rbf.predict(pneumonia.x_val)
     y_real = pneumonia.y_val
     hf.report_results(y_pred,y_real,"./A/figures/RBF confusion matrix validation set")
 
     # Using PCA with SVM rbf
     dimensions_list = range(1,15) #List of dimensions to try
-    scores = hf.PCA_SVM(pneumonia, dimensions_list) # score per dimension
+    #scores = hf.PCA_SVM(pneumonia, dimensions_list) # score per dimension
 
     # Save plot evaluating the performance over different PCA components
-    hf.plot_hyper_tuning(dimensions_list,scores,"F1-Score over diffent PCA-SVM","Components",name="PCA components scores (SVM)")
+    #hf.plot_hyper_tuning(dimensions_list,scores,"F1-Score over diffent PCA-SVM","Components",name="PCA components scores (SVM)")
 
     # Selecting only the first 9 components based on the past graph
     svm_pca,pca,scaler = hf.PCA_model(pneumonia,9)
@@ -110,6 +119,8 @@ def pneumonia_task():
 
     # Plot confusion matrix for all the models on test set
     main_label = "Confusion matrix "
+
+    print("Printing results")
 
     for index, model in enumerate(models):
         print(labels[index])
