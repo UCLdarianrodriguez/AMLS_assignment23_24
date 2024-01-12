@@ -55,7 +55,7 @@ The main.py calls the modules associated with each task, with each task residing
 ## Setup
 
 Run conda env create -f environment.yml && conda activate AML-final && python main.py
-this will create the environment and install the required libraries:
+this will run the main file after creating the environment and installing the required libraries:
 
 * numpy
 * jupyter
@@ -77,3 +77,8 @@ For example the following lines are commented to skip PCA hyperparameter tuning:
     hf.plot_hyper_tuning(dimensions_list,scores,"F1-Score over diffent PCA-SVM","Components",name="PCA components scores (SVM)")
 
 The classification report, specifying the precision, recall, and F1-score for each model, is directly printed in the console.
+
+
+The “load_data” method in class “MNISTDataManager”, downloads the dataset using medmnist library in .npz format, “split_dataset” divides the dataset into training, validation, and testing sets.
+
+
