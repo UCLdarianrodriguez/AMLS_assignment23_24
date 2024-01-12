@@ -1,10 +1,10 @@
 numpy
-requests
 jupyter
 jupyterlab
 pandas
 matplotlib
 scikit-learn
 seaborn
-psycopg2
 medmnist
+tensorflow
+keras
